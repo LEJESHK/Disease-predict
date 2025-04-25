@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Disease Prediction System</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f4ff, #e0ecff);
+      color: #2c3e50;
+      min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, #276ef1, #3e8df1);
+      color: white;
+      border-bottom: 8px solid #cfdffe;
+    }
+
+    .hero-text {
+      max-width: 60%;
+      margin-left: 120px; /* Move text 120px to the right */
+    }
+
+    .hero h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 25px;
+    }
+
+    .hero img {
+      max-width: 200px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Container for main content */
+    .container {
+      max-width: 950px;
+      margin: 40px auto;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Form and text input */
+    label {
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1.5px solid #b4cfff;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    textarea:focus {
+      border-color: #276ef1;
+      box-shadow: 0 0 8px rgba(39, 110, 241, 0.2);
+    }
+
+    /* Button Styling */
+    .btn {
+      margin-top: 20px;
+      background: #276ef1;
+      background: linear-gradient(to right, #276ef1, #4e9cf9);
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #1f5be0, #358df0);
+    }
+
+    /* Result Box */
+    .result {
+      margin-top: 35px;
+      font-size: 18px;
+      color: #2c3e50;
+      background-color: #f0f6ff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Symptom Box Styling */
+    .symptom-box {
+      background-color: #f5f8ff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 30px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #d9e6ff;
+      display: none;
+    }
+
+    .symptom-box strong {
+      display: block;
+      margin-bottom: 10px;
+      color: #276ef1;
+    }
+
+    /* Symptoms List - 4 Columns Layout */
+    .symptom-box ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px 16px;
+    }
+
+    .symptom-box li {
+      padding: 8px 10px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      border-radius: 6px;
+      background-color: #e9f0ff;
+    }
+
+    .symptom-box li:hover {
+      background: #d6e7ff;
+      transform: scale(1.05);
+      box-shadow: 0 3px 8px rgba(39, 110, 241, 0.15);
+    }
+
+    /* Centered content */
+    center {
+      text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .hero-text {
+        max-width: 100%;
+        margin-left: 0; /* Remove the margin when the screen size is small */
+      }
+
+      .hero img {
+        max-width: 150px;
+        margin-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Book Appointment with Trusted Doctors</h1>
+      <p>Stay Home, Use This Site, Help Society</p>
+    </div>
+    <img src="{{ url_for('static', filename='img/image.png') }}" alt="Doctors">
+  </section>
+
+  <div class="container">
+    <form method="POST">
+      <center>
+        <label for="symptomTextarea"><strong>Enter your symptoms:</strong></label><br><br>
+        <textarea id="symptomTextarea" name="symptoms" placeholder="e.g., Headache, Vomiting">{{ symptoms_entered }}</textarea>
+        <br>
+        <button class="btn" type="submit" id="predictBtn">Predict Disease</button>
+      </center>
+    </form>
+
+    {% if final_prediction %}
+    <div class="result">
+      <center>
+        <h2><strong>Prediction Result:</strong></h2>
+        <p><strong>Predicted Disease:</strong> {{ final_prediction }}</p>
+        <p><strong>Consult Specialist:</strong> {{ final_specialist }}</p>
+      </center>
+    </div>
+    {% endif %}
+
+    <div class="symptom-box" id="symptomBox">
+      <strong>Click to Add Symptoms:</strong>
+      <ul id="symptomList">
+        {% for symptom in symptoms %}
+        <li>{{ symptom }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const textarea = document.getElementById('symptomTextarea');
+    const symptomBox = document.getElementById('symptomBox');
+    const predictBtn = document.getElementById('predictBtn');
+    const listItems = document.querySelectorAll('#symptomList li');
+
+    textarea.addEventListener('focus', () => {
+      symptomBox.style.display = 'block';
+    });
+
+    predictBtn.addEventListener('click', () => {
+      symptomBox.style.display = 'none';
+    });
+
+    listItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const current = textarea.value.toLowerCase();
+        const clicked = item.textContent.trim();
+
+        if (!current.includes(clicked.toLowerCase())) {
+          textarea.value = current === '' ? clicked : textarea.value + ', ' + clicked;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
