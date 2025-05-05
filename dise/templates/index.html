@@ -18,6 +18,7 @@
       min-height: 100vh;
     }
 
+    /* Hero Section */
     .hero {
       display: flex;
       justify-content: space-between;
@@ -30,7 +31,7 @@
 
     .hero-text {
       max-width: 60%;
-      margin-left: 120px;
+      margin-left: 120px; /* Move text 120px to the right */
     }
 
     .hero h1 {
@@ -50,6 +51,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
+    /* Container for main content */
     .container {
       max-width: 950px;
       margin: 40px auto;
@@ -59,6 +61,7 @@
       box-shadow: 0 12px 25px rgba(0, 0, 0, 0.07);
     }
 
+    /* Form and text input */
     label {
       font-size: 18px;
       font-weight: 500;
@@ -81,6 +84,7 @@
       box-shadow: 0 0 8px rgba(39, 110, 241, 0.2);
     }
 
+    /* Button Styling */
     .btn {
       margin-top: 20px;
       background: #276ef1;
@@ -93,14 +97,13 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
     }
 
     .btn:hover {
       background: linear-gradient(to right, #1f5be0, #358df0);
     }
 
+    /* Result Box */
     .result {
       margin-top: 35px;
       font-size: 18px;
@@ -111,6 +114,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
 
+    /* Symptom Box Styling */
     .symptom-box {
       background-color: #f5f8ff;
       padding: 20px;
@@ -128,6 +132,7 @@
       color: #276ef1;
     }
 
+    /* Symptoms List - 4 Columns Layout */
     .symptom-box ul {
       list-style: none;
       display: grid;
@@ -149,10 +154,12 @@
       box-shadow: 0 3px 8px rgba(39, 110, 241, 0.15);
     }
 
+    /* Centered content */
     center {
       text-align: center;
     }
 
+    /* Responsive Design */
     @media (max-width: 768px) {
       .hero {
         flex-direction: column;
@@ -162,7 +169,7 @@
 
       .hero-text {
         max-width: 100%;
-        margin-left: 0;
+        margin-left: 0; /* Remove the margin when the screen size is small */
       }
 
       .hero img {
@@ -175,7 +182,6 @@
 <body>
 
   <section class="hero">
-    <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="Logo" style="height: 50px; margin-right: 20px;">
     <div class="hero-text">
       <h1>Book Appointment with Trusted Doctors</h1>
       <p>Stay Home, Use This Site, Help Society</p>
@@ -193,14 +199,12 @@
       </center>
     </form>
 
-    {% if request.method == 'POST' %}
+    {% if final_prediction %}
     <div class="result">
       <center>
         <h2><strong>Prediction Result:</strong></h2>
         <p><strong>Predicted Disease:</strong> {{ final_prediction }}</p>
         <p><strong>Consult Specialist:</strong> {{ final_specialist }}</p>
-        <br>
-        <button class="btn">Consult Doctor</button>
       </center>
     </div>
     {% endif %}
@@ -233,6 +237,7 @@
       item.addEventListener('click', () => {
         const current = textarea.value.toLowerCase();
         const clicked = item.textContent.trim();
+
         if (!current.includes(clicked.toLowerCase())) {
           textarea.value = current === '' ? clicked : textarea.value + ', ' + clicked;
         }
